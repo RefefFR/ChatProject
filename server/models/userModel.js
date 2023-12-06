@@ -3,7 +3,6 @@ const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
-  photo: String,
   password:String,
   phone: String,
   img_url: String,
