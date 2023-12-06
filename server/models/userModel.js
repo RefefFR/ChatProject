@@ -20,9 +20,7 @@ exports.createToken = (_id) => {
 
 exports.validateUser = (_reqBody) => {
   const joiSchema = Joi.object({
-    name:Joi.string().min(2).max(15).required(),
-    // email() -> בודק שהמייל שנשלח במאפיין הגיוני למייל
-    email:Joi.string().min(2).max(150).email().required(),
+    phone:Joi.string().min(8).max(15).required(),
     password:Joi.string().min(3).max(16).required()
   })
   return joiSchema.validate(_reqBody)
@@ -30,7 +28,7 @@ exports.validateUser = (_reqBody) => {
 
 exports.validateLogin = (_reqBody) => {
   const joiSchema = Joi.object({
-    email:Joi.string().min(2).max(150).email().required(),
+    phone:Joi.string().min(8).max(15).required(),
     password:Joi.string().min(3).max(16).required()
   })
   return joiSchema.validate(_reqBody)

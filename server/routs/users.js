@@ -2,6 +2,7 @@ const express = require("express");
 const { validateUser, userModel, validateLogin, createToken } = require("../models/userModel");
 const bcrypt=require("bcrypt");
 const router = express.Router();
+const {auth}=require("../midlewares/auth");
 
 
 // ראוט שמציג משתמשים לפי חיפוש
@@ -36,7 +37,6 @@ router.get("/showInfo", auth, async(req,res) => {
     res.status(502).json({err})
   }
 })
-
 
 router.get("/userInfo/:id", async(req,res) => {
  
@@ -79,10 +79,10 @@ router.post("/login", async(req, res)=>{
     return res.status(400).json(validBody.error.details);
   }
   try{
-    // here we check if the email does exist int the database
-    const user = await userModel.findOne({email:req.body.email})
+    // here we check if the phone does exist in the database
+    const user = await userModel.findOne({phone:req.body.phone})
     if (!user){
-      return res.status(401).json({err:"Email is not found"});
+      return res.status(401).json({err:"phone is not found"});
     }
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword){
@@ -100,17 +100,20 @@ router.post("/login", async(req, res)=>{
     res.status(502).json(err);
   } 
 })
-router.put("/contact/:id/:contactName", auth, async (req, res) => {
+router.put("/contact/:phone/:contactName", auth, async (req, res) => {
   try {
-    const idQ = req.params.id;
-    contactName=req.params.contactName;
-    const user = await userModel.findOne({_id: req.tokenData._id})
-    const contactId = await userModel.findOne({ _id: idQ });
-    if (!contactId) {
+
+    const phoneQ = req.params.phone;
+    const contactName=req.params.contactName;
+    const user = await userModel.findOne({_id: req.tokenData._id});
+    const contactUser = await userModel.findOne({ phone: phoneQ });
+    if (!contactUser) {
+
       return res.status(404).json({ message: "user not found" });
     }
-    const contact = {contactId:contact._id, contactName: contactName};
-    const contactIndex = user.contacts.findIndex(item => item.name === contact.name && item.id === contact.id);
+    const contact = {phone:phoneQ, name: contactName};
+    console.log(phoneQ);
+    const contactIndex = user.contacts.findIndex(item => item.name === contact.name && item.phone === contact.phone);
     if (contactIndex != -1) {
       user.contacts.splice(contactIndex, 1);
     }
