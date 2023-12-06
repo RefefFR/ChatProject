@@ -2,7 +2,6 @@ const express = require("express");
 const { validateUser, userModel, validateLogin, createToken } = require("../models/userModel");
 const bcrypt=require("bcrypt");
 const router = express.Router();
-const {auth, authAdmin} = require("../midlewares/auth")
 
 
 // ראוט שמציג משתמשים לפי חיפוש
