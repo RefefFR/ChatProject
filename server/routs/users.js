@@ -100,7 +100,8 @@ router.post("/login", async(req, res)=>{
     res.status(502).json(err);
   } 
 })
-router.put("/contact/:phone/:contactName", auth, async (req, res) => {
+
+router.put("/SaveContact/:phone/:contactName", auth, async (req, res) => {
   try {
 
     const phoneQ = req.params.phone;
@@ -112,7 +113,6 @@ router.put("/contact/:phone/:contactName", auth, async (req, res) => {
       return res.status(404).json({ message: "user not found" });
     }
     const contact = {phone:phoneQ, name: contactName};
-    console.log(phoneQ);
     const contactIndex = user.contacts.findIndex(item => item.name === contact.name && item.phone === contact.phone);
     if (contactIndex != -1) {
       user.contacts.splice(contactIndex, 1);
@@ -124,5 +124,22 @@ router.put("/contact/:phone/:contactName", auth, async (req, res) => {
     res.json(err);
   }
 });
+
+router.put("/contactName/:phone", auth, async (req, res) => {
+  try {
+
+    const phoneQ = req.params.phone;
+    const user = await userModel.findOne({_id: req.tokenData._id});
+    const contact = user.contacts.find(item => item.phone === phoneQ);
+    if (!contact) {
+      return res.json(null);
+    }
+    res.status(201).json(contact.name);
+  } catch (err) {
+    res.json(err);
+  }
+});
+
+
 
 module.exports=router;
