@@ -14,8 +14,10 @@ const messageSchema = new mongoose.Schema({
   dateCreated: {
     type: Date,
     default: Date.now
+  }},{
+    timestamps: true
   }
-});
+);
 
 const chatSchema = new mongoose.Schema({
   id1: {
