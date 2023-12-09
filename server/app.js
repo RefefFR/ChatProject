@@ -44,5 +44,5 @@ const server = http.createServer(app);
 // בודק באיזה פורט להריץ את השרת, אם בשרת אמיתי אוסף את המשתנה פורט 
 // מסביבת העבודה שלו ואם לא אז מהפורט 3001
 
-const port = process.env.PORT||3003;
+const port = process.env.PORT||3002;
 server.listen(port);
